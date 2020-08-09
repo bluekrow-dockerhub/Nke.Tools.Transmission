@@ -1,13 +1,11 @@
 # Nke.Tools.Transmission
 
-![GTHB Workflow Status](https://img.shields.io/github/workflow/status/bluekrow-dockerhub/nke.tools.transmission/Auto-Versioning?label=Auto%20Version&logo=github&logoColor=gainsboro)
+![GTHB Workflow Status](https://img.shields.io/github/workflow/status/bluekrow-dockerhub/Nke.Tools.Transmission/Auto-Versioning?label=Auto%20Version&logo=github&logoColor=gainsboro)
 ![DCKR Cloud Build Status](https://img.shields.io/docker/cloud/build/bluekrow/nke-tools-transmission?label=Auto%20Build&logo=docker&logoColor=gainsboro)
-![GTHB Last Commit](https://img.shields.io/github/last-commit/bluekrow-dockerhub/nke.tools.transmission?label=Last%20Commit&logo=github&logoColor=gainsboro)
-![GTHB Latest Tag (by date)](https://img.shields.io/github/v/tag/bluekrow-dockerhub/nke.tools.transmission?label=Latest%20Tag&logo=github&logoColor=gainsboro)
+![GTHB Last Commit](https://img.shields.io/github/last-commit/bluekrow-dockerhub/Nke.Tools.Transmission?label=Last%20Commit&logo=github&logoColor=gainsboro)
+![GTHB Latest Tag (by date)](https://img.shields.io/github/v/tag/bluekrow-dockerhub/Nke.Tools.Transmission?label=Latest%20Tag&logo=github&logoColor=gainsboro)
 
-Customized [Transmission][tx-web] image to execute on an [Alpine][alpine-web] container
-[tx-web]: https://transmissionbt.com/
-[alpine-web]: https://alpinelinux.org/
+Customized [Transmission](https://transmissionbt.com/) image to execute on an [Alpine](https://alpinelinux.org) container  
 
 ## Automation
 ### Auto Versioning
