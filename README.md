@@ -1,4 +1,4 @@
-# Nke.Tools.Transmission
+# Nke.Tools.Transmission 
 
 ![GTHB Workflow Status](https://img.shields.io/github/workflow/status/bluekrow-dockerhub/Nke.Tools.Transmission/Auto-Versioning?label=Auto%20Version&logo=github&logoColor=gainsboro)
 ![DCKR Cloud Build Status](https://img.shields.io/docker/cloud/build/bluekrow/nke-tools-transmission?label=Auto%20Build&logo=docker&logoColor=gainsboro)
@@ -6,6 +6,9 @@
 ![GTHB Latest Tag (by date)](https://img.shields.io/github/v/tag/bluekrow-dockerhub/Nke.Tools.Transmission?label=Latest%20Tag&logo=github&logoColor=gainsboro)
 
 Customized [Transmission](https://transmissionbt.com/) image to execute on an [Alpine](https://alpinelinux.org) container  
+
+## NOTICE: THIS IS A WORK IN PROGRESS
+Will change Alpha label accordingly when Dockerfile becomes stable 
 
 ## Automation
 ### Auto Versioning
