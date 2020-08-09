@@ -7,8 +7,6 @@ TRX_IMAGE="trx-img"
 TRX_CONTAINER="trx-cnt"
 TEST_SCRIPT="dockerhub.tests.sh"
 
-#sudo echo sudo aqcuired
-
 echo
 echo REMOVING CONTAINERS AND IMAGES
 echo ------------------------------
@@ -27,8 +25,7 @@ docker build --tag $TRX_IMAGE .
 echo
 echo CREATE NEW CONTAINER
 echo --------------------
-#run options
-#d:detach i:interactive t:tty
+#run options --> d:detach i:interactive t:tty
 docker run -d -it --name $TRX_CONTAINER $TRX_IMAGE sh
 
 echo
