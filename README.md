@@ -13,9 +13,14 @@ Will change Alpha label accordingly when Dockerfile becomes stable
 ## Automation
 ### Auto Versioning
 Using GitHub Actions, and a [VERSION](VERSION) file, for auto tagging, only when pushing commits to master.  
+The current alternatives for VERSION file content are:
+- Alpha.\<number>
+- Beta.\<number>
+- \<number>.\<number>
+ 
 **Next Step**: would be auto semantic versioning.
 ### Auto Build
-Using DockerHub automatic builds, to build the following **identical** docker tags when a tag is created on GitHub repository master branch:
+Using DockerHub automatic builds, to build the following docker tags every time a tag is created on GitHub repository master branch:
 - Latest
 - \<major>
 - \<major>.\<minor>
