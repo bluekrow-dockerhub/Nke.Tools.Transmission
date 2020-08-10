@@ -10,9 +10,9 @@ echoError () {
 
 execute_test()
 {
-    EXPECTED_VALUE=$1
-    ACTUAL_VALUE=$2
-    TEST_TITLE=$3
+    TEST_TITLE=$1
+    EXPECTED_VALUE=$2
+    ACTUAL_VALUE=$3
     
     echo
     echo TEST: $TEST_TITLE
@@ -34,6 +34,6 @@ echo ------------------
 NIX_TITLE="INSTALLED_OS"
 NIX_OS="alpine"
 RESULT_OS=$(cat /etc/os-release | grep '^ID=' | sed -e 's/^ID=//' )
-execute_test $NIX_OS $RESULT_OS $NIX_TITLE
+execute_test $NIX_TITLE $NIX_OS $RESULT_OS 
 
 exit 0
