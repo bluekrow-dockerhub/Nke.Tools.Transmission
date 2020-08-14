@@ -1,11 +1,11 @@
 #!/bin/sh
 
 echoInfo () {
-	echo "[INFO] $1"
+	echo -e "\e[1;32m[INFO] $1\e[0m"
 }
 
 echoError () {
-	echo "[ERROR] $1"
+	echo -e "\e[1;31m[ERROR] $1\e[0m"
 }
 
 execute_test()
@@ -15,7 +15,7 @@ execute_test()
     ACTUAL_VALUE=$3
     
     echo
-    echo TEST: $TEST_TITLE
+    echo -e "\e[1mTEST: $TEST_TITLE\e[0m"
     echo "Expected value: $EXPECTED_VALUE"
     echo "Actual value: $ACTUAL_VALUE"
     if [ "$ACTUAL_VALUE" = "$EXPECTED_VALUE" ]; then 
@@ -35,5 +35,10 @@ NIX_TITLE="INSTALLED_OS"
 NIX_OS="alpine"
 RESULT_OS=$(cat /etc/os-release | grep '^ID=' | sed -e 's/^ID=//' )
 execute_test $NIX_TITLE $NIX_OS $RESULT_OS 
+
+TRANS_TITLE="INSTALLED_TRANSMISSION"
+EXP_TRANS="/etc/conf.d/transmission-daemon"
+ACTUAL_TRANS=$(ls /etc/conf.d/*)
+execute_test $TRANS_TITLE $EXP_TRANS $ACTUAL_TRANS 
 
 exit 0
