@@ -5,4 +5,6 @@ RUN apk add transmission-daemon
 
 COPY ./entrypoint.sh ./
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["check"] 
+CMD ["check"]
+
+EXPOSE 9091
