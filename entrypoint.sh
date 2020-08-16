@@ -11,6 +11,11 @@ if [ "$1" = "sh" ]; then
     exit 0
 fi
 
+if [ "$1" = "trx" ]; then
+    exec Dockerfile.Scripts/200.Transmission.sh
+    exit 0
+fi
+
 if [ "$#" -eq 0 ]; then
     echo "No parameters supplied. Execute Default Action"
     exit 0

@@ -47,3 +47,32 @@ The `entrypoint.sh` and other files executed inside the container, should be mad
 ```
 git update-index --chmod=+x entrypoint.sh
 ```
+
+### 2.Transmission RPC Web error 403: Forbidden
+- Must add docker container network to whitelist. By default the docker container network is: `172.17.0.0`. This can be added on `settings.json` like this:
+  ```
+  "rpc-whitelist": "127.0.0.1,172.17.*.*",
+  ```
+  Or this:
+  ```
+  transmission-daemon -a "127.0.0.1,172.17.*.*"
+  ```
+
+### 3. Transmission RPC Web Error 409 Conflict
+An error is shown with the following content:
+```
+409:Conlfict
+Your request had an invalid session-id header.
+To fix this, follow these steps:
+  1. When reading a response, get its X-Transmission-Session-Id header and remember it
+  2. Add the updated header to your outgoing requests
+  3. When you get this 409 error message, resend your request with the updated header
+This requirement has been added to help prevent CSRF attacks.
+X-Transmission-Session-Id: <session-id-token>
+```
+**Solution**
+- Some internet will suggest reocompile trasmission binaries. There is no need of that, simply take into account that the default url for transmission is:
+  ```
+  http://localhost:9091/trasnmission/web/
+  ``` 
+  and **must** include the trailing slash after the _web_ part

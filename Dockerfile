@@ -1,10 +1,9 @@
 FROM alpine:3.12
 LABEL mantainer=BlueKrow
 
-RUN apk add transmission-daemon
+COPY ./Dockerfile.Scripts/ ./Dockerfile.Scripts/
+RUN ./Dockerfile.Scripts/100.Setup.sh
 
 COPY ./entrypoint.sh ./
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["check"]
-
-EXPOSE 9091
