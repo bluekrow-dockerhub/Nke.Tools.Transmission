@@ -9,9 +9,10 @@ docker run \
     -p 9091:9091 \
     -e RPC_USERNAME=user \
     -e RPC_PASSWORD=pass \
-    -v /mnt/c/Users/ndioses/Tmp/Config:/trx/Config \
-    -v /mnt/c/Users/ndioses/Tmp/Down:/trx/Downloads \
-    -v /mnt/c/Users/ndioses/Tmp/Inc:/trx/Incomplete \
-    -v /mnt/c/Users/ndioses/Tmp/Watch:/trx/WatchDir \
+    -v $HOME/Tmp/Config:/trx/Config \
+    -v $HOME/Tmp/Down:/trx/Downloads \
+    -v $HOME/Tmp/Inc:/trx/Incomplete \
+    -v $HOME/Tmp/Watch:/trx/WatchDir \
     --name trx-local \
     trx-img trx
+
