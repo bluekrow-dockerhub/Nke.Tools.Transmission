@@ -2,6 +2,16 @@
 set -eu
 
 transmission-daemon \
- -f \
- -a "127.0.0.*,172.17.*.*"
- 
+ --foreground \
+ --allowed "127.0.0.1,::1,172.17.*.*" \
+ --auth \
+ --config-dir "/trx/Config" \
+ --download-dir "/trx/Downloads" \
+ --global-seedratio 0.0500 \
+ --incomplete-dir "/trx/Incomplete" \
+ --no-lpd \
+ --no-portmap \
+ --password ${RPC_PASSWORD} \
+ --peerport 51991 \
+ --username ${RPC_USERNAME} \
+ --watch-dir "/trx/WatchDir" \
