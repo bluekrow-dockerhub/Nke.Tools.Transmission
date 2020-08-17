@@ -29,7 +29,20 @@ Using DockerHub automatic builds, to build the following docker tags every time 
 Using DockerHub automatic testing with a System Under Test (SUT) service after every build and before every push to the DockerHub registry.
 
 ## User Guide
-\<To be included>
+A common script to run this container can be executed as follows
+```
+sudo docker run \
+    -d \
+    -p 9091:9091 \
+    -e RPC_USERNAME=<WebUsername> \
+    -e RPC_PASSWORD=<WebPassword> \
+    -v <PathToDownloads>:/trx/Downloads \
+    -v <PathToIncomplete>:/trx/Incomplete \
+    -v <PathToWatchDir>:/trx/WatchDir \
+    --name transmission \
+    bluekrow/nke-tools-transmission trx   
+```
+We can use _-it_ flags if we want to see/interact with the containers console
 
 ## Troubleshooting
 ### 1. Permissions error when executing SUTs on Dockerhub
