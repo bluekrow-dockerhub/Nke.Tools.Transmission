@@ -36,6 +36,7 @@ sudo docker run \
     -p 9091:9091 \
     -e RPC_USERNAME=<WebUsername> \
     -e RPC_PASSWORD=<WebPassword> \
+    -v <PathToConfig>:/trx/Config \
     -v <PathToDownloads>:/trx/Downloads \
     -v <PathToIncomplete>:/trx/Incomplete \
     -v <PathToWatchDir>:/trx/WatchDir \

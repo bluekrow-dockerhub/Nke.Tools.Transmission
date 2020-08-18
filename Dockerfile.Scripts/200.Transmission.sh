@@ -3,7 +3,7 @@ set -eu
 
 transmission-daemon \
  --foreground \
- --allowed "127.0.0.1,::1,172.17.*.*" \
+ --allowed "127.0.0.1,::1,172.17.*.*,192.168.1.*" \
  --auth \
  --config-dir "/trx/Config" \
  --download-dir "/trx/Downloads" \
