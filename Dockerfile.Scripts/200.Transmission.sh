@@ -12,6 +12,6 @@ transmission-daemon \
  --no-lpd \
  --no-portmap \
  --password ${RPC_PASSWORD} \
- --peerport 51991 \
+ --peerport 57841 \
  --username ${RPC_USERNAME} \
  --watch-dir "/trx/WatchDir" \
