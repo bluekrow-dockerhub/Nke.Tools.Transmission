@@ -1,0 +1,14 @@
+[Unit]
+Description=Transmission container
+After=docker.service
+Wants=network-online.target docker.socket
+Requires=docker.socket
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/opt/docker-transmission/transmission-start.sh 
+ExecStop=/opt/docker-transmission/transmission-stop.sh
+
+[Install]
+WantedBy=multi-user.target
