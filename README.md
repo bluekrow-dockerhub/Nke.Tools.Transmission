@@ -8,7 +8,11 @@
 Customized [Transmission](https://transmissionbt.com/) image to execute on an [Alpine](https://alpinelinux.org) container  
 
 ## NOTICE: THIS IS A WORK IN PROGRESS
-Will change Alpha label accordingly when Dockerfile becomes stable 
+- Currently in Beta Level
+- The container is usable as is, some manual pre config is required 
+- Will add use of environment variables when using installer
+- Will add the use of volume to persist configuration, instead of binding
+- When all of these are tested, will change to 1.0 version
 
 ## Automation
 ### Auto Versioning
@@ -18,7 +22,7 @@ The current alternatives for VERSION file content are:
 - Beta.\<number>
 - \<number>.\<number>
  
-**Next Step**: would be auto semantic versioning.
+**Next Step**: would be auto semantic versioning
 ### Auto Build
 Using DockerHub automatic builds, to build the following docker tags every time a tag is created on GitHub repository master branch:
 - Latest
@@ -29,11 +33,16 @@ Using DockerHub automatic builds, to build the following docker tags every time 
 Using DockerHub automatic testing with a System Under Test (SUT) service after every build and before every push to the DockerHub registry.
 
 ## User Guide
-A common script to run this container can be executed as follows
+Following there are two options for running the container
+Remember to replace the values in "<...>" delimiters for your own when using the examples provided (both in the inline example, and in the installer script) 
+
+### Running once manually 
+A common script  to run this container can be executed as follows
 ```
 sudo docker run \
     -d \
     -p 9091:9091 \
+    -p 57841:57841 \
     -e RPC_USERNAME=<WebUsername> \
     -e RPC_PASSWORD=<WebPassword> \
     -v <PathToConfig>:/trx/Config \
@@ -44,6 +53,18 @@ sudo docker run \
     bluekrow/nke-tools-transmission trx   
 ```
 We can use _-it_ flags if we want to see/interact with the containers console
+
+### Running as a service 
+- First of all, get the latest installer:
+  ```
+  $ curl -L https://github.com/bluekrow-dockerhub/Nke.Tools.Transmission/releases/latest/download/trx-installer.zip > trx-installer.zip
+  $ unzip trx-installer.zip
+  ```
+- Then modify [transmission-start.sh](/Install/transmission-start.sh) replacing values in "<...>" with your own values
+- Finally run installer
+  ```
+  sudo ./install.sh
+  ```
 
 ## Troubleshooting
 ### 1. Permissions error when executing SUTs on Dockerhub
