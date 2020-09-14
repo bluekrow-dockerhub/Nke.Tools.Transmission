@@ -1,7 +1,13 @@
+#!/bin/sh
+
+/usr/bin/docker stop transmission
+
+/usr/bin/docker rm transmission
+
 /usr/bin/docker pull bluekrow/nke-tools-transmission
 
 /usr/bin/docker run \
-  -d \
+  -t \
   -p 9091:9091 \
   -p 57841:57841 \
   -e RPC_USERNAME=<transmissionweb-username> \

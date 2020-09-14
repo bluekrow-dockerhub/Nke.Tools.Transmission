@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-sudo rm -r /opt/docker-transmission
+sudo rm -rf /opt/docker-transmission
 sudo mkdir -p /opt/docker-transmission
 
 sudo cp transmission-start.sh /opt/docker-transmission/
