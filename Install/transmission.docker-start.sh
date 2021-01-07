@@ -1,11 +1,13 @@
 #!/bin/sh
 
+echo "Removing old container"
 /usr/bin/docker stop transmission
-
 /usr/bin/docker rm transmission
 
+echo "Updating container image from dockerhub"
 /usr/bin/docker pull bluekrow/nke-tools-transmission
 
+echo "Running container as a service"
 /usr/bin/docker run \
   -t \
   -p 9091:9091 \
@@ -18,3 +20,5 @@
   -v <watchdir-directory-host-path>:/trx/WatchDir \
   --name transmission \
   bluekrow/nke-tools-transmission trx
+
+  echo "Done"
