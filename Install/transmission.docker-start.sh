@@ -14,11 +14,11 @@ echo "Running container as a service"
   -p 57841:57841 \
   -e RPC_USERNAME=<transmissionweb-username> \
   -e RPC_PASSWORD=<transmissionweb-password> \
-  -v <configuration-directory-host-path>:/trx/Config \
+  -v transmission-config:/trx/Config \
   -v <downloads-directory-host-path>:/trx/Downloads \
   -v <incomplete-directory-host-path>:/trx/Incomplete \
   -v <watchdir-directory-host-path>:/trx/WatchDir \
   --name transmission \
   bluekrow/nke-tools-transmission trx
 
-  echo "Done"
+echo "Done"
