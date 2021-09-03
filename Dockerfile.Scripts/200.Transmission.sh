@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-cp -n Dockerfile.Scripts/110.settings.json /trx/Config/settings.json
+false | cp -i Dockerfile.Scripts/110.settings.json /trx/Config/settings.json 2>/dev/null
 
 transmission-daemon \
  --foreground \
