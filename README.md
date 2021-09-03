@@ -11,7 +11,7 @@ Customized [Transmission](https://transmissionbt.com/) image to execute on an [A
 - Currently in Beta Level
 - The container is usable as is, some manual pre config is required 
 - Will add use of environment variables when using installer
-- Will add the use of volume to persist configuration, instead of binding
+- An initially empty volume named transmission-config is required for the container to work. Will add volume creation on install later, but for now it must be created manually.
 - When all of these are tested, will change to 1.0 version
 
 ## Automation
@@ -52,6 +52,8 @@ sudo docker run \
     --name transmission \
     bluekrow/nke-tools-transmission trx   
 ```
+Internally, the container will use a predefined settings file for transmission ([settings.json](Dockerfile.Scripts/110.settings.json))
+
 We can use _-it_ flags if we want to see/interact with the containers console
 
 ### Running as a service 
