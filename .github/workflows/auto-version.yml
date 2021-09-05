@@ -39,7 +39,7 @@ jobs:
         echo v4: $v4
         
         fullVersion=$v1.$v2.$v3.$v4
-        echo fullVersion: $vfullVersion
+        echo fullVersion: $fullVersion
         
         releaseVersion=v$fullVersion
         echo releaseVersion: $releaseVersion
@@ -57,6 +57,14 @@ jobs:
         
         echo Step Done.
         
+    - name: Test to receive versions
+      id: version_test
+      run: |
+        echo  ${{ steps.create_tag.outputs.release_tag }}
+        echo  ${{ steps.create_tag.outputs.major_version }}
+        echo  ${{ steps.create_tag.outputs.minor_version }}
+        echo  ${{ steps.create_tag.outputs.full_version }}
+       
 #    - name: Build and Publish container
 #      id: dockerhub_deploy
 #      run: |
