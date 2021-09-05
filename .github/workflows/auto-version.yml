@@ -35,8 +35,8 @@ jobs:
     - name: Create docker image
       id: docker_image
       run: |
-        docker build --no-cache --rm --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:test.v1 .
-        docker image ls
+        docker build --no-cache --rm --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:test.v1.1 --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:test.v1.2 .
+        docker images ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
         echo ${{secrets.DOCKER_HUB_ACCESS_TOKEN}} | docker login --username ${{secrets.DOCKER_HUB_USERNAME}} --password-stdin
         docker push --all-tags ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
 #    - name: Create release
