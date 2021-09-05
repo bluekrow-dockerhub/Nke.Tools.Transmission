@@ -2,11 +2,6 @@ name: Auto-Versioning
 
 on: 
   workflow_dispatch:
-    inputs:
-      name:
-        description: 'Person to greet'
-        required: true
-        default: 'Mona the Octocat'
   push:
     branches: 
       - master
@@ -41,7 +36,8 @@ jobs:
       id: docker_image
       run: |
         echo ${{secrets.DOCKER_HUB_ACCESS_TOKEN}} | docker login --username ${{secrets.DOCKER_HUB_USERNAME}} --password-stdin
-        docker build --no-cache --rm --tag ${{secrets.DOCKER_HUB_ACCESS_TOKEN}}/nke-tools-transmission:latest .
+        docker build --no-cache --rm --tag ${{secrets.DOCKER_HUB_ACCESS_TOKEN}}/nke-tools-transmission:test.v1 .
+        docker push --alltags ${{secrets.DOCKER_HUB_ACCESS_TOKEN}}/nke-tools-transmission
 #    - name: Create release
 #      id: create_release
 #      uses: actions/create-release@v1
