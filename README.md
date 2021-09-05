@@ -2,7 +2,7 @@
 
 ![GTHB Workflow Status](https://img.shields.io/github/workflow/status/bluekrow-dockerhub/Nke.Tools.Transmission/Auto-Versioning?label=CI%20Pipeline&logo=github)
 ![GTHB Last Commit](https://img.shields.io/github/last-commit/bluekrow-dockerhub/Nke.Tools.Transmission?label=Last%20Commit&logo=github)
-![GTHB Latest Tag (by date)](https://img.shields.io/github/v/tag/bluekrow-dockerhub/Nke.Tools.Transmission?label=Latest%20Tag&logo=github)
+![GTHB Latest Tag (by date)](https://img.shields.io/github/v/tag/bluekrow-dockerhub/Nke.Tools.Transmission?label=Latest%20Tag&logo=github)  
 ![DCKR Image Version by date](https://img.shields.io/docker/v/bluekrow/nke-tools-transmission?color=blue&logo=docker)
 ![DCKR Image Size by tag)](https://img.shields.io/docker/image-size/bluekrow/nke-tools-transmission/latest?logo=docker)
 
