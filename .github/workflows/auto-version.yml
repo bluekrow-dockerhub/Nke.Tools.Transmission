@@ -1,4 +1,4 @@
-name: Auto-Versioning
+name: "Continuous Integration and Deployment"
 
 on: 
   workflow_dispatch:
@@ -10,43 +10,69 @@ on:
       - 'README.md'
       
 jobs:
-  build:
+  ci-pipeline:
+    name: "CI/CD Pipeline"
+    
     runs-on: ubuntu-latest
+    
     steps:
     - name: Repository Checkout
+      id: repo_checkout
       uses: actions/checkout@v2
       
     - name: Create tag with auto-version
       id: create_tag
       run: |
-        v1=$(cat VERSION)
+        versionFromFile=$(cat VERSION)
+        splittedVersions=(${versionFromFile//./ })
+
+        v1=${splittedVersions[0]}   
         echo v1: $v1
-        v2=$(( ($(date +%y%m%d)) ))
+
+        v2=${splittedVersions[1]}   
         echo v2: $v2
-        v3=$(( ($(date +%H | bc) * 3600) + ($(date +%M | bc) * 60) + ($(date +%S | bc) * 1) ))
+
+        v3=$(( ($(date +%y%m%d)) ))
         echo v3: $v3
-        ver=v$v1.$v2.$v3
-        echo ver: $ver
-        git tag $ver
-        git push origin $ver
-        echo Autoversioning done, Tag produced
-        echo ::set-output name=tag_autoversion::$ver
         
-    - name: Create docker image
-      id: docker_image
-      run: |
-        docker build --no-cache --rm --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:test.v1.1 --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:test.v1.2 .
-        docker images ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
-        echo ${{secrets.DOCKER_HUB_ACCESS_TOKEN}} | docker login --username ${{secrets.DOCKER_HUB_USERNAME}} --password-stdin
-        docker push --all-tags ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
+        v4=$(( ($(date +%H | bc) * 3600) + ($(date +%M | bc) * 60) + ($(date +%S | bc) * 1) ))
+        echo v4: $v4
+        
+        fullVersion=$v1.$v2.$v3.$v4
+        echo fullVersion: $vfullVersion
+        
+        releaseVersion=v$fullVersion
+        echo releaseVersion: $releaseVersion
+        
+        echo Creating and pushing tags
+        git tag $releaseVersion
+        git push origin $releaseVersion
+        echo Autoversioning done, Tag produced
+        
+        echo Setting output values
+        echo ::set-output name=release_tag::$releaseVersion
+        echo ::set-output name=major_version::$v1
+        echo ::set-output name=minor_version::$v1.$v2
+        echo ::set-output name=full_version::$fullVersion
+        
+        echo Step Done.
+        
+#    - name: Build and Publish container
+#      id: dockerhub_deploy
+#      run: |
+#        docker build --no-cache --rm --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:test.v1.1 --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:test.v1.2 .
+#        docker images ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
+#        echo ${{secrets.DOCKER_HUB_ACCESS_TOKEN}} | docker login --username ${{secrets.DOCKER_HUB_USERNAME}} --password-stdin
+#        docker push --all-tags ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
+#        
 #    - name: Create release
 #      id: create_release
 #      uses: actions/create-release@v1
 #      env:
 #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #      with:
-#        tag_name: ${{ steps.create_tag.outputs.tag_autoversion }}
-#        release_name: Release ${{ steps.create_tag.outputs.tag_autoversion }}
+#        tag_name: ${{ steps.create_tag.outputs.release_tag }}
+#        release_name: Release ${{ steps.create_tag.outputs.release_tag }}
 #        draft: false
 #        prerelease: false
 #    - name: Create release asset
