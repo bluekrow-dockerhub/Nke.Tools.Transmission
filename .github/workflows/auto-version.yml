@@ -52,7 +52,7 @@ jobs:
         
         echo Step Done.
 
-    - name: Create tag with auto-version
+    - name: Create tag with auto version
       id: create_tag
       run: |
         releaseVersion=${{ steps.auto_version.outputs.release_tag }}
@@ -60,44 +60,54 @@ jobs:
         git tag $releaseVersion
         git push origin $releaseVersion
         echo Tag published
+        
         echo Step Done.
 
-    - name: Test to receive versions
-      id: version_test
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.auto_version.outputs.release_tag }}
+        release_name: Release ${{ steps.auto_version.outputs.release_tag }}
+        draft: false
+        prerelease: false
+
+    - name: Create release asset
+      id: create_release_asset
       run: |
-        echo  ${{ steps.auto_version.outputs.release_tag }}
-        echo  ${{ steps.auto_version.outputs.major_version }}
-        echo  ${{ steps.auto_version.outputs.minor_version }}
-        echo  ${{ steps.auto_version.outputs.full_version }}
-       
-#    - name: Build and Publish container
-#      id: dockerhub_deploy
-#      run: |
-#        docker build --no-cache --rm --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:test.v1.1 --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:test.v1.2 .
-#        docker images ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
-#        echo ${{secrets.DOCKER_HUB_ACCESS_TOKEN}} | docker login --username ${{secrets.DOCKER_HUB_USERNAME}} --password-stdin
-#        docker push --all-tags ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
-#        
-#    - name: Create release
-#      id: create_release
-#      uses: actions/create-release@v1
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        tag_name: ${{ steps.create_tag.outputs.release_tag }}
-#        release_name: Release ${{ steps.create_tag.outputs.release_tag }}
-#        draft: false
-#        prerelease: false
-#    - name: Create release asset
-#      run: |
-#        zip --junk-paths trx-installer ./Install/*
-#    - name: Upload release asset
-#      id: upload-release-asset 
-#      uses: actions/upload-release-asset@v1
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        upload_url: ${{ steps.create_release.outputs.upload_url }}
-#        asset_path: ./trx-installer.zip
-#        asset_name: trx-installer.zip
-#        asset_content_type: application/zip
+        zip --junk-paths trx-installer ./Install/*
+        
+    - name: Upload release asset
+      id: upload_release_asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./trx-installer.zip
+        asset_name: trx-installer.zip
+        asset_content_type: application/zip
+
+    - name: Build and Publish container
+      id: dockerhub_deploy
+      run: |
+        majorVersionTag=${{ steps.auto_version.outputs.major_version }}
+        minorVersionTag=${{ steps.auto_version.outputs.minor_version }}
+        fullVersionTag=${{ steps.auto_version.outputs.full_version }}
+        
+        echo Create image and assign tags
+        docker build --no-cache --rm \
+          --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:$majorVersionTag \
+          --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:$minorVersionTag \
+          --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:$fullVersionTag \
+          --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:latest \
+          .
+        docker images ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
+        
+        echo Publish all tags on Dockerhub
+        echo ${{secrets.DOCKER_HUB_ACCESS_TOKEN}} | docker login --username ${{secrets.DOCKER_HUB_USERNAME}} --password-stdin
+        docker push --all-tags ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
+        
+        echo Step Done.
