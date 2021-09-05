@@ -20,8 +20,8 @@ jobs:
       id: repo_checkout
       uses: actions/checkout@v2
       
-    - name: Create tag with auto-version
-      id: create_tag
+    - name: Auto versioning
+      id: auto_version
       run: |
         versionFromFile=$(cat VERSION)
         splittedVersions=(${versionFromFile//./ })
@@ -44,11 +44,6 @@ jobs:
         releaseVersion=v$fullVersion
         echo releaseVersion: $releaseVersion
         
-        echo Creating and pushing tags
-        git tag $releaseVersion
-        git push origin $releaseVersion
-        echo Autoversioning done, Tag produced
-        
         echo Setting output values
         echo ::set-output name=release_tag::$releaseVersion
         echo ::set-output name=major_version::$v1
@@ -56,14 +51,24 @@ jobs:
         echo ::set-output name=full_version::$fullVersion
         
         echo Step Done.
-        
+
+    - name: Create tag with auto-version
+      id: create_tag
+      run: |
+        releaseVersion=${{ steps.auto_version.outputs.release_tag }}
+        echo Creating and pushing tags for version $releaseVersion
+        git tag $releaseVersion
+        git push origin $releaseVersion
+        echo Tag published
+        echo Step Done.
+
     - name: Test to receive versions
       id: version_test
       run: |
-        echo  ${{ steps.create_tag.outputs.release_tag }}
-        echo  ${{ steps.create_tag.outputs.major_version }}
-        echo  ${{ steps.create_tag.outputs.minor_version }}
-        echo  ${{ steps.create_tag.outputs.full_version }}
+        echo  ${{ steps.auto_version.outputs.release_tag }}
+        echo  ${{ steps.auto_version.outputs.major_version }}
+        echo  ${{ steps.auto_version.outputs.minor_version }}
+        echo  ${{ steps.auto_version.outputs.full_version }}
        
 #    - name: Build and Publish container
 #      id: dockerhub_deploy
