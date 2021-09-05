@@ -1,0 +1,113 @@
+name: "Continuous Integration and Deployment"
+
+on: 
+  workflow_dispatch:
+  push:
+    branches: 
+      - master
+    paths-ignore:
+      - '.github/workflows/**'
+      - 'README.md'
+      
+jobs:
+  ci-pipeline:
+    name: "CI/CD Pipeline"
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Repository Checkout
+      id: repo_checkout
+      uses: actions/checkout@v2
+      
+    - name: Auto versioning
+      id: auto_version
+      run: |
+        versionFromFile=$(cat VERSION)
+        splittedVersions=(${versionFromFile//./ })
+
+        v1=${splittedVersions[0]}   
+        echo v1: $v1
+
+        v2=${splittedVersions[1]}   
+        echo v2: $v2
+
+        v3=$(( ($(date +%y%m%d)) ))
+        echo v3: $v3
+        
+        v4=$(( ($(date +%H | bc) * 3600) + ($(date +%M | bc) * 60) + ($(date +%S | bc) * 1) ))
+        echo v4: $v4
+        
+        fullVersion=$v1.$v2.$v3.$v4
+        echo fullVersion: $fullVersion
+        
+        releaseVersion=v$fullVersion
+        echo releaseVersion: $releaseVersion
+        
+        echo Setting output values
+        echo ::set-output name=release_tag::$releaseVersion
+        echo ::set-output name=major_version::$v1
+        echo ::set-output name=minor_version::$v1.$v2
+        echo ::set-output name=full_version::$fullVersion
+        
+        echo Step Done.
+
+    - name: Create tag with auto version
+      id: create_tag
+      run: |
+        releaseVersion=${{ steps.auto_version.outputs.release_tag }}
+        echo Creating and pushing tags for version $releaseVersion
+        git tag $releaseVersion
+        git push origin $releaseVersion
+        echo Tag published
+        
+        echo Step Done.
+
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.auto_version.outputs.release_tag }}
+        release_name: Release ${{ steps.auto_version.outputs.release_tag }}
+        draft: false
+        prerelease: false
+
+    - name: Create release asset
+      id: create_release_asset
+      run: |
+        zip --junk-paths trx-installer ./Install/*
+        
+    - name: Upload release asset
+      id: upload_release_asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./trx-installer.zip
+        asset_name: trx-installer.zip
+        asset_content_type: application/zip
+
+    - name: Build and Publish container
+      id: dockerhub_deploy
+      run: |
+        majorVersionTag=${{ steps.auto_version.outputs.major_version }}
+        minorVersionTag=${{ steps.auto_version.outputs.minor_version }}
+        fullVersionTag=${{ steps.auto_version.outputs.full_version }}
+        
+        echo Create image and assign tags
+        docker build --no-cache --rm \
+          --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:$majorVersionTag \
+          --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:$minorVersionTag \
+          --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:$fullVersionTag \
+          --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:latest \
+          .
+        docker images ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
+        
+        echo Publish all tags on Dockerhub
+        echo ${{secrets.DOCKER_HUB_ACCESS_TOKEN}} | docker login --username ${{secrets.DOCKER_HUB_USERNAME}} --password-stdin
+        docker push --all-tags ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
+        
+        echo Step Done.
