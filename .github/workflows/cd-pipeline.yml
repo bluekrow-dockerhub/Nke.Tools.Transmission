@@ -12,6 +12,8 @@ on:
 jobs:
   ci-pipeline:
     name: "CI/CD Pipeline"
+    env: 
+      DOCKER_REPOSITORY: nke-tools-transmission
     
     runs-on: ubuntu-latest
     
@@ -99,16 +101,16 @@ jobs:
         
         echo Create image and assign tags
         docker build --no-cache --rm \
-          --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:$majorVersionTag \
-          --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:$minorVersionTag \
-          --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:$fullVersionTag \
-          --tag ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission:latest \
+          --tag ${{secrets.DOCKER_HUB_USERNAME}}/$DOCKER_REPOSITORY:$majorVersionTag \
+          --tag ${{secrets.DOCKER_HUB_USERNAME}}/$DOCKER_REPOSITORY:$minorVersionTag \
+          --tag ${{secrets.DOCKER_HUB_USERNAME}}/$DOCKER_REPOSITORY:$fullVersionTag \
+          --tag ${{secrets.DOCKER_HUB_USERNAME}}/$DOCKER_REPOSITORY:latest \
           .
-        docker images ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
+        docker images ${{secrets.DOCKER_HUB_USERNAME}}/$DOCKER_REPOSITORY
         
         echo Publish all tags on Dockerhub
         echo ${{secrets.DOCKER_HUB_ACCESS_TOKEN}} | docker login --username ${{secrets.DOCKER_HUB_USERNAME}} --password-stdin
-        docker push --all-tags ${{secrets.DOCKER_HUB_USERNAME}}/nke-tools-transmission
+        docker push --all-tags ${{secrets.DOCKER_HUB_USERNAME}}/$DOCKER_REPOSITORY
         
         echo Step Done.
 
@@ -119,7 +121,7 @@ jobs:
         DOCKER_USER: ${{ secrets.DOCKER_HUB_USERNAME }}
         DOCKER_PASS: ${{ secrets.DOCKER_HUB_PASSWORD }}
       with:
-        destination_container_repo: ${{ secrets.DOCKER_HUB_USERNAME }}/nke-tools-transmission
+        destination_container_repo: ${{ secrets.DOCKER_HUB_USERNAME }}/$DOCKER_REPOSITORY
         provider: dockerhub
         short_description: 'Transmission Container on Alpine image'
         readme_file: 'README.md'
