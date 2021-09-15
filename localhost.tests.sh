@@ -26,13 +26,13 @@ echo
 echo CREATE NEW CONTAINER
 echo --------------------
 #run options --> d:detach i:interactive t:tty
-docker run -d -it --name $TRX_CONTAINER $TRX_IMAGE sh
+docker run -t -i --name $TRX_CONTAINER $TRX_IMAGE sh
 
 echo
 echo RUN CLOUD TESTS LOCALLLY
 echo ------------------------
 docker cp $TEST_SCRIPT $TRX_CONTAINER:$TEST_SCRIPT
-docker exec -it $TRX_CONTAINER sh $TEST_SCRIPT
+docker exec -t -i $TRX_CONTAINER sh $TEST_SCRIPT
 
 echo
 echo STOPPING CONTAINER
