@@ -22,6 +22,10 @@ jobs:
       id: repo_checkout
       uses: actions/checkout@v2
       
+    - name: Container testing
+      id: container_tests
+      run: ./localhost.tests.sh no-cache
+
     - name: Auto versioning
       id: auto_version
       run: |
