@@ -22,6 +22,10 @@ jobs:
       id: repo_checkout
       uses: actions/checkout@v2
       
+    - name: Container testing
+      id: container_tests
+      run: ./localhost.tests.sh
+
     - name: Auto versioning
       id: auto_version
       run: |
@@ -100,7 +104,7 @@ jobs:
         fullVersionTag=${{ steps.auto_version.outputs.full_version }}
         
         echo Create image and assign tags
-        docker build --no-cache --rm \
+        docker build --no-cache --quiet --rm \
           --tag ${{secrets.DOCKER_HUB_USERNAME}}/$DOCKER_REPOSITORY:$majorVersionTag \
           --tag ${{secrets.DOCKER_HUB_USERNAME}}/$DOCKER_REPOSITORY:$minorVersionTag \
           --tag ${{secrets.DOCKER_HUB_USERNAME}}/$DOCKER_REPOSITORY:$fullVersionTag \
@@ -108,9 +112,10 @@ jobs:
           .
         docker images ${{secrets.DOCKER_HUB_USERNAME}}/$DOCKER_REPOSITORY
         
+        echo 
         echo Publish all tags on Dockerhub
         echo ${{secrets.DOCKER_HUB_ACCESS_TOKEN}} | docker login --username ${{secrets.DOCKER_HUB_USERNAME}} --password-stdin
-        docker push --all-tags ${{secrets.DOCKER_HUB_USERNAME}}/$DOCKER_REPOSITORY
+        docker push --all-tags --quiet ${{secrets.DOCKER_HUB_USERNAME}}/$DOCKER_REPOSITORY
         
         echo Step Done.
 
@@ -121,7 +126,7 @@ jobs:
         DOCKER_USER: ${{ secrets.DOCKER_HUB_USERNAME }}
         DOCKER_PASS: ${{ secrets.DOCKER_HUB_PASSWORD }}
       with:
-        destination_container_repo: ${{ secrets.DOCKER_HUB_USERNAME }}/$DOCKER_REPOSITORY
+        destination_container_repo: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_REPOSITORY }}
         provider: dockerhub
         short_description: 'Transmission Container on Alpine image'
         readme_file: 'README.md'
