@@ -11,13 +11,13 @@ TEST_SCRIPT="dockerhub.tests.sh"
 echo
 echo REBUILD IMAGE FROM DOCKERFILE
 echo -----------------------------
-docker build --tag $TRX_IMAGE .
+docker build -t --tag $TRX_IMAGE .
 
 echo
 echo CREATE NEW CONTAINER
 echo --------------------
 #run options --> d:detach i:interactive t:tty
-docker run -t -i --name $TRX_CONTAINER $TRX_IMAGE sh
+docker run -it --name $TRX_CONTAINER $TRX_IMAGE sh
 
 echo
 echo COPY TEST SCRIPTS
