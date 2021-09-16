@@ -2,7 +2,7 @@
 set -eu 
 
 echo
-echo INITIALIZE LOCAL TESTING
+echo INITIALIZE CLOUD TESTING
 echo ------------------------
 TRX_IMAGE="trx-img"
 TRX_CONTAINER="trx-cnt"
@@ -13,8 +13,8 @@ echo "TEST_SCRIPT: $TEST_SCRIPT"
 
 echo
 echo BUILD IMAGE FROM DOCKERFILE
-echo -----------------------------
-docker build --quiet --tag $TRX_IMAGE .
+echo ---------------------------
+docker build --no-cache --quiet --tag $TRX_IMAGE .
 docker images $TRX_IMAGE
 
 echo
@@ -25,16 +25,25 @@ docker ps
 
 echo
 echo COPY TEST SCRIPTS
-echo ------------------------
+echo -----------------
 docker cp $TEST_SCRIPT $TRX_CONTAINER:$TEST_SCRIPT
 echo "$TEST_SCRIPT copied into container"
 
 echo
-echo RUN CLOUD TESTS LOCALLLY
-echo ------------------------
+echo RUN CLOUD TESTS 
+echo ---------------
 docker exec -i $TRX_CONTAINER sh $TEST_SCRIPT
 
 echo
-echo STOPPING CONTAINER
+echo CONTAINER TEARDOWN
+echo ------------------
+echo Stopping container
 docker stop $TRX_CONTAINER
-echo FINISHED
+echo Removing container
+docker rm $TRX_CONTAINER
+echo Removing image 
+docker rmi $TRX_IMAGE
+
+echo
+echo TESTING FINISHED
+echo ________________
