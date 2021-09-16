@@ -24,7 +24,7 @@ jobs:
       
     - name: Container testing
       id: container_tests
-      run: ./localhost.tests.sh no-cache
+      run: ./localhost.tests.sh
 
     - name: Auto versioning
       id: auto_version

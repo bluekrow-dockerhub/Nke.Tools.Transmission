@@ -8,16 +8,6 @@ TRX_IMAGE="trx-img"
 TRX_CONTAINER="trx-cnt"
 TEST_SCRIPT="dockerhub.tests.sh"
 
-#echo
-#echo REMOVING CONTAINERS AND IMAGES
-#echo ------------------------------
-#docker stop $TRX_CONTAINER
-#docker rm $TRX_CONTAINER
-#if [ "$1" = "no-cache" ]; then 
-#    echo "Enforcing option $1"
-#    sudo docker rmi $TRX_IMAGE
-#fi 
-
 echo
 echo REBUILD IMAGE FROM DOCKERFILE
 echo -----------------------------
@@ -30,9 +20,13 @@ echo --------------------
 docker run -t -i --name $TRX_CONTAINER $TRX_IMAGE sh
 
 echo
-echo RUN CLOUD TESTS LOCALLLY
+echo COPY TEST SCRIPTS
 echo ------------------------
 docker cp $TEST_SCRIPT $TRX_CONTAINER:$TEST_SCRIPT
+
+echo
+echo RUN CLOUD TESTS LOCALLLY
+echo ------------------------
 docker exec -t -i $TRX_CONTAINER sh $TEST_SCRIPT
 
 echo
