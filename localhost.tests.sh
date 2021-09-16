@@ -8,15 +8,15 @@ TRX_IMAGE="trx-img"
 TRX_CONTAINER="trx-cnt"
 TEST_SCRIPT="dockerhub.tests.sh"
 
-echo
-echo REMOVING CONTAINERS AND IMAGES
-echo ------------------------------
-docker stop $TRX_CONTAINER
-docker rm $TRX_CONTAINER
-if [ "$1" = "no-cache" ]; then 
-    echo "Enforcing option $1"
-    sudo docker rmi $TRX_IMAGE
-fi 
+#echo
+#echo REMOVING CONTAINERS AND IMAGES
+#echo ------------------------------
+#docker stop $TRX_CONTAINER
+#docker rm $TRX_CONTAINER
+#if [ "$1" = "no-cache" ]; then 
+#    echo "Enforcing option $1"
+#    sudo docker rmi $TRX_IMAGE
+#fi 
 
 echo
 echo REBUILD IMAGE FROM DOCKERFILE
