@@ -14,8 +14,8 @@ echo "TEST_SCRIPT: $TEST_SCRIPT"
 echo
 echo BUILD IMAGE FROM DOCKERFILE
 echo -----------------------------
-docker build --tag $TRX_IMAGE .
-docker images $TRX_IMAGE --quiet
+docker build --quiet --tag $TRX_IMAGE .
+docker images $TRX_IMAGE
 
 echo
 echo CREATE NEW CONTAINER
@@ -27,8 +27,7 @@ echo
 echo COPY TEST SCRIPTS
 echo ------------------------
 docker cp $TEST_SCRIPT $TRX_CONTAINER:$TEST_SCRIPT
-docker exec -i $TRX_CONTAINER sh "ls -lha"
-
+echo "$TEST_SCRIPT copied into container"
 
 echo
 echo RUN CLOUD TESTS LOCALLLY
