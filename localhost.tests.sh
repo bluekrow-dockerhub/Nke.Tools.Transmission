@@ -18,7 +18,7 @@ echo
 echo CREATE NEW CONTAINER
 echo --------------------
 #run options --> d:detach i:interactive t:tty
-docker run -it --name $TRX_CONTAINER $TRX_IMAGE sh
+docker run -id --name $TRX_CONTAINER $TRX_IMAGE sh
 docker ps 
 
 echo
